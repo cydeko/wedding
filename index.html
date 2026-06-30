@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cody &amp; Haily — 28–30 May 2027</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0b0b0a;
+    --bg-alt: #111110;
+    --ink: #f2efe9;
+    --ink-dim: #9a968d;
+    --line: #2b2a27;
+    --accent: #b08d5b;
+  }
+
+  *{ box-sizing: border-box; margin:0; padding:0; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  ::selection{ background: var(--accent); color: var(--bg); }
+
+  a{ color: inherit; }
+
+  .eyebrow{
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    font-weight: 500;
+  }
+
+  /* ---------- Password Gate ---------- */
+  #gate{
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    transition: opacity 0.7s ease, visibility 0.7s ease;
+  }
+  #gate.unlocked{
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .gate-box{
+    text-align: center;
+    padding: 2rem;
+    width: 100%;
+    max-width: 360px;
+  }
+  .gate-box .eyebrow{ margin-bottom: 1.4rem; }
+  .gate-names{
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 1.6rem;
+    margin-bottom: 2.4rem;
+    letter-spacing: 0.01em;
+  }
+  #gate form{
+    display: flex;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 0.6rem;
+    transition: border-color 0.3s ease;
+  }
+  #gate form:focus-within{ border-color: var(--ink-dim); }
+  #gate input[type="password"]{
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.1em;
+    flex: 1;
+    padding: 0.4rem 0;
+  }
+  #gate input[type="password"]::placeholder{ color: var(--ink-dim); letter-spacing: 0.1em; }
+  #gate button{
+    background: none;
+    border: none;
+    color: var(--ink-dim);
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding: 0 0.2rem;
+    transition: color 0.25s ease, transform 0.25s ease;
+  }
+  #gate button:hover{ color: var(--accent); transform: translateX(2px); }
+  .gate-error{
+    margin-top: 1rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    height: 1rem;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .gate-error.show{ opacity: 1; }
+  .shake{ animation: shake 0.4s ease; }
+  @keyframes shake{
+    20%{ transform: translateX(-6px); }
+    40%{ transform: translateX(6px); }
+    60%{ transform: translateX(-4px); }
+    80%{ transform: translateX(4px); }
+    100%{ transform: translateX(0); }
+  }
+
+  /* ---------- Site reveal ---------- */
+  #site{
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+  #site.show{ opacity: 1; }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    text-align: center;
+    padding: 3rem 1.5rem 4rem;
+    overflow: hidden;
+  }
+  .hero-img{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 30%;
+    filter: grayscale(1) contrast(1.05);
+    transform: scale(1.04);
+    opacity: 0;
+    animation: heroIn 2.2s ease forwards;
+  }
+  @keyframes heroIn{
+    from{ opacity: 0; transform: scale(1.08); }
+    to{ opacity: 1; transform: scale(1.04); }
+  }
+  .hero::after{
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(11,11,10,0.15) 0%, rgba(11,11,10,0.55) 55%, rgba(11,11,10,0.96) 100%);
+  }
+  .hero-content{ position: relative; z-index: 2; }
+  .hero .eyebrow{ margin-bottom: 1.6rem; opacity: 0; animation: fadeUp 1s ease 0.6s forwards; }
+  .hero-names{
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(2.6rem, 9vw, 5.4rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    opacity: 0;
+    animation: fadeUp 1.1s ease 0.85s forwards;
+  }
+  .hero-names em{ font-style: italic; font-weight: 300; color: var(--ink-dim); font-size: 0.65em; display:block; margin: 0.3em 0; }
+  .hero-dates{
+    margin-top: 1.8rem;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(0.95rem, 2vw, 1.15rem);
+    letter-spacing: 0.18em;
+    color: var(--ink-dim);
+    opacity: 0;
+    animation: fadeUp 1.1s ease 1.1s forwards;
+  }
+  @keyframes fadeUp{
+    from{ opacity: 0; transform: translateY(14px); }
+    to{ opacity: 1; transform: translateY(0); }
+  }
+
+  .scroll-cue{
+    position: absolute;
+    bottom: 1.6rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 38px;
+    background: linear-gradient(var(--ink-dim), transparent);
+    z-index: 2;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.6s forwards;
+  }
+
+  /* ---------- Itinerary ---------- */
+  .itinerary{
+    background: var(--bg-alt);
+    padding: 6rem 1.5rem 5rem;
+    border-top: 1px solid var(--line);
+  }
+  .section-head{
+    text-align: center;
+    margin-bottom: 3.6rem;
+  }
+  .section-head .eyebrow{ margin-bottom: 0.9rem; }
+  .section-head h2{
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    color: var(--ink);
+  }
+
+  .itin-list{
+    max-width: 720px;
+    margin: 0 auto;
+    border-top: 1px solid var(--line);
+  }
+  .itin-row{
+    display: grid;
+    grid-template-columns: 5rem 1fr auto;
+    align-items: baseline;
+    gap: 1.2rem;
+    padding: 1.8rem 0.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .itin-day{
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .itin-mid{ min-width: 0; }
+  .itin-place{
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: clamp(1rem, 2.4vw, 1.25rem);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .itin-sub{
+    font-size: 0.82rem;
+    color: var(--ink-dim);
+    margin-top: 0.35rem;
+    letter-spacing: 0.02em;
+  }
+  .itin-weekday{
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  /* ---------- Image strip ---------- */
+  .strip{
+    position: relative;
+    height: 56vh;
+    min-height: 320px;
+    max-height: 620px;
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .strip img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 22%;
+    filter: grayscale(1) contrast(1.05);
+  }
+  .strip-caption{
+    position: absolute;
+    left: 1.5rem;
+    bottom: 1.3rem;
+    z-index: 2;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    background: rgba(11,11,10,0.55);
+    padding: 0.4rem 0.7rem;
+    backdrop-filter: blur(2px);
+  }
+
+  /* ---------- Countdown ---------- */
+  .countdown{
+    background: var(--bg);
+    padding: 5.5rem 1.5rem;
+    text-align: center;
+  }
+  .countdown .eyebrow{ margin-bottom: 1.6rem; }
+  .countdown-number{
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(4rem, 16vw, 8.5rem);
+    line-height: 1;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .countdown-label{
+    margin-top: 0.8rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+  }
+
+  /* ---------- Footer ---------- */
+  footer{
+    border-top: 1px solid var(--line);
+    padding: 3.4rem 1.5rem 3rem;
+    text-align: center;
+  }
+  footer p{
+    max-width: 30rem;
+    margin: 0 auto;
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--ink-dim);
+  }
+  footer .names-sm{
+    margin-top: 1.6rem;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--ink);
+  }
+
+  @media (max-width: 480px){
+    .itin-row{ grid-template-columns: 3.4rem 1fr auto; gap: 0.8rem; padding: 1.5rem 0.25rem; }
+    .itin-weekday{ display: none; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Password Gate -->
+  <div id="gate">
+    <div class="gate-box">
+      <div class="eyebrow">Private</div>
+      <div class="gate-names">Cody &amp; Haily</div>
+      <form id="gate-form" autocomplete="off">
+        <input type="password" id="gate-input" placeholder="Password" required>
+        <button type="submit" aria-label="Enter">&#8594;</button>
+      </form>
+      <div class="gate-error" id="gate-error">Incorrect password — try again</div>
+    </div>
+  </div>
+
+  <!-- Site -->
+  <div id="site">
+
+    <section class="hero">
+      <img class="hero-img" src="assets/london.jpg" alt="Cody and Haily, St Paul's Cathedral, London">
+      <div class="hero-content">
+        <div class="eyebrow">Save the Date</div>
+        <h1 class="hero-names">Cody<br><em>&amp;</em>Haily</h1>
+        <div class="hero-dates">28 — 30 May 2027</div>
+      </div>
+      <div class="scroll-cue"></div>
+    </section>
+
+    <section class="itinerary">
+      <div class="section-head">
+        <div class="eyebrow">The Weekend</div>
+        <h2>Three days, three cities</h2>
+      </div>
+      <div class="itin-list">
+        <div class="itin-row">
+          <div class="itin-day">28</div>
+          <div class="itin-mid">
+            <div class="itin-place">London</div>
+            <div class="itin-sub">Details to follow</div>
+          </div>
+          <div class="itin-weekday">Friday</div>
+        </div>
+        <div class="itin-row">
+          <div class="itin-day">29</div>
+          <div class="itin-mid">
+            <div class="itin-place">Oxford</div>
+            <div class="itin-sub">Details to follow</div>
+          </div>
+          <div class="itin-weekday">Saturday</div>
+        </div>
+        <div class="itin-row">
+          <div class="itin-day">30</div>
+          <div class="itin-mid">
+            <div class="itin-place">Blenheim Palace</div>
+            <div class="itin-sub">Details to follow</div>
+          </div>
+          <div class="itin-weekday">Sunday</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="strip">
+      <img src="assets/oxford.jpg" alt="Cody and Haily, Radcliffe Camera, Oxford">
+      <div class="strip-caption">Oxford</div>
+    </div>
+
+    <section class="countdown">
+      <div class="eyebrow">Counting Down</div>
+      <div class="countdown-number" id="countdown-number">—</div>
+      <div class="countdown-label" id="countdown-label">days to go</div>
+    </section>
+
+    <footer>
+      <p>Formal invitations, accommodation details, and everything else you'll need will follow in good time. For now, save the date.</p>
+      <div class="names-sm">Cody &amp; Haily</div>
+    </footer>
+
+  </div>
+
+<script>
+  // ---------- Password gate ----------
+  (function(){
+    const PASSWORD = "zora";
+    const gate = document.getElementById('gate');
+    const site = document.getElementById('site');
+    const form = document.getElementById('gate-form');
+    const input = document.getElementById('gate-input');
+    const error = document.getElementById('gate-error');
+    const box = document.querySelector('.gate-box');
+
+    function unlock(){
+      sessionStorage.setItem('wedding_unlocked', '1');
+      gate.classList.add('unlocked');
+      site.classList.add('show');
+    }
+
+    if (sessionStorage.getItem('wedding_unlocked') === '1') {
+      unlock();
+    }
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      if (input.value.trim().toLowerCase() === PASSWORD) {
+        unlock();
+      } else {
+        error.classList.add('show');
+        box.classList.add('shake');
+        input.value = '';
+        setTimeout(() => box.classList.remove('shake'), 400);
+      }
+    });
+  })();
+
+  // ---------- Countdown ----------
+  (function(){
+    const target = new Date('2027-05-28T00:00:00');
+    const numEl = document.getElementById('countdown-number');
+    const labelEl = document.getElementById('countdown-label');
+
+    function update(){
+      const now = new Date();
+      const diffMs = target - now;
+      const days = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+      if (days > 0) {
+        numEl.textContent = days;
+        labelEl.textContent = days === 1 ? 'day to go' : 'days to go';
+      } else if (days === 0) {
+        numEl.textContent = 'Today';
+        labelEl.textContent = 'the day has come';
+      } else {
+        numEl.textContent = '—';
+        labelEl.textContent = 'see you soon';
+      }
+    }
+    update();
+  })();
+</script>
+
+</body>
+</html>
