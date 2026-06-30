@@ -203,7 +203,7 @@
   .itin-row{
     display: grid;
     grid-template-columns: 4.5rem 1fr 5.5rem;
-    align-items: start;
+    align-items: center;
     gap: 1.2rem;
     padding: 1.7rem 0.25rem;
     border-bottom: 1px solid var(--line);
@@ -225,7 +225,7 @@
     text-transform: uppercase;
     color: var(--ink-dim);
   }
-  .itin-mid{ min-width: 0; padding-top: 0.3rem; text-align: center; }
+  .itin-mid{ min-width: 0; text-align: center; }
   .itin-place{
     font-weight: 500;
     font-size: clamp(0.95rem, 2vw, 1.1rem);
@@ -239,7 +239,6 @@
     color: var(--ink-dim);
     white-space: nowrap;
     text-align: center;
-    padding-top: 0.4rem;
   }
 
   @media (max-width: 760px){
@@ -375,7 +374,7 @@
 
 <script>
   // Set to false before sending the link to guests.
-  const PROTOTYPE_MODE = true;
+  const PROTOTYPE_MODE = false;
 
   // ---------- Password gate ----------
   (function(){
